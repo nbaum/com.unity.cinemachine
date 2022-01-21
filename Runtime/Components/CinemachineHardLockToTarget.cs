@@ -32,6 +32,19 @@ namespace Cinemachine
         /// <returns>Highest damping setting in this component</returns>
         public override float GetMaxDampTime() { return m_Damping; }
 
+        /// <summary>This is called to notify the us that a target got warped,
+        /// so that we can update its internal state to make the camera
+        /// also warp seamlessy.</summary>
+        /// <param name="target">The object that was warped</param>
+        /// <param name="positionDelta">The amount the target's position changed</param>
+        public override void OnTargetObjectWarped(Transform target, Vector3 positionDelta) {
+            base.OnTargetObjectWarped(target, positionDelta);
+            if (target == FollowTarget)
+            {
+                m_PreviousTargetPosition += positionDelta;
+            }
+        }
+
         /// <summary>Applies the composer rules and orients the camera accordingly</summary>
         /// <param name="curState">The current camera state</param>
         /// <param name="deltaTime">Used for calculating damping.  If less than
